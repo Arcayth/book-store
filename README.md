@@ -62,7 +62,7 @@ Make sure you have the following installed on your machine:
     air
     ```
 
-3. Access the API at `http://localhost:8080`.
+3. Access the API at `http://localhost:8080/api`.
 
 ## API Endpoints
 
