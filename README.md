@@ -26,7 +26,6 @@ This is a simple Book Store API built with Golang, Gin, and MongoDB.
 Make sure you have the following installed on your machine:
 
 - [Golang](https://golang.org/)
-- [MongoDB](https://www.mongodb.com/try/download/community)
 - [Air](https://github.com/cosmtrek/air) (for development)
 
 ### Installation
