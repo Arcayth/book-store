@@ -32,6 +32,10 @@ func CloseDB() error {
 	return nil
 }
 
-func GetCollection(database string, collection string) *mongo.Collection {
-	return MongoClient.Database(database).Collection(collection)
+func GetCollection(collection string) *mongo.Collection {
+	databaseName := os.Getenv("MONGO_DB_NAME")
+	if databaseName == "" {
+		log.Fatal("You must set your 'MONGO_DB_NAME' environment variable. See\n\t https://www.mongodb.com/docs/drivers/go/current/usage-examples/#environment-variable")
+	}
+	return MongoClient.Database(databaseName).Collection(collection)
 }

@@ -15,7 +15,7 @@ import (
 
 func GetBooks(c *gin.Context) {
 	var books []models.Book
-	var booksCollection = database.GetCollection("booksDB", "books")
+	var booksCollection = database.GetCollection("books")
 
 	filter := bson.D{}
 	cursor, err := booksCollection.Find(context.TODO(), filter)
@@ -38,7 +38,7 @@ func GetBookById(c *gin.Context) {
 	var book models.Book
 
 	filter := bson.D{{Key: "_id", Value: id}}
-	var booksCollection = database.GetCollection("booksDB", "books")
+	var booksCollection = database.GetCollection("books")
 	if err := booksCollection.FindOne(context.Background(), filter).Decode(&book); err != nil {
 		if err == mongo.ErrNoDocuments {
 			utils.ErrorResponse(c, http.StatusNotFound, "Book not found")
