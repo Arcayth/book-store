@@ -2,6 +2,7 @@ package database
 
 import (
 	"context"
+	"fmt"
 	"log"
 	"os"
 
@@ -19,7 +20,7 @@ func StartDB() error {
 	var err error
 	MongoClient, err = mongo.Connect(context.TODO(), options.Client().ApplyURI(uri))
 	if err != nil {
-		panic(err)
+		return fmt.Errorf("could not start mongodb client %w", err)
 	}
 	return nil
 }
@@ -31,6 +32,6 @@ func CloseDB() error {
 	return nil
 }
 
-func GetCollection(collection string) *mongo.Collection {
-	return MongoClient.Database("booksDBTes").Collection(collection)
+func GetCollection(database string, collection string) *mongo.Collection {
+	return MongoClient.Database(database).Collection(collection)
 }

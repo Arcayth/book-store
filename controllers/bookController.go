@@ -2,6 +2,7 @@ package controllers
 
 import (
 	"context"
+	"fmt"
 	"net/http"
 
 	"github.com/gin-gonic/gin"
@@ -13,16 +14,31 @@ import (
 )
 
 func GetBooks(c *gin.Context) {
-	c.JSON(200, gin.H{
-		"message": "pong",
-	})
+	var books []models.Book
+	var booksCollection = database.GetCollection("booksDB", "books")
+
+	filter := bson.D{}
+	cursor, err := booksCollection.Find(context.TODO(), filter)
+	if err != nil {
+		utils.ErrorResponse(c, http.StatusInternalServerError, err.Error())
+		return
+	}
+
+	if err = cursor.All(context.Background(), &books); err != nil {
+		utils.ErrorResponse(c, http.StatusInternalServerError, err.Error())
+		return
+	}
+	utils.JSONResponse(c, http.StatusOK, books)
+	fmt.Println(books)
+
 }
 
 func GetBookById(c *gin.Context) {
-	var book models.Book
 	id := c.Param("id")
-	booksCollection := database.GetCollection("books")
-	filter := bson.D{{"_id", id}}
+	var book models.Book
+
+	filter := bson.D{{Key: "_id", Value: id}}
+	var booksCollection = database.GetCollection("booksDB", "books")
 	if err := booksCollection.FindOne(context.Background(), filter).Decode(&book); err != nil {
 		if err == mongo.ErrNoDocuments {
 			utils.ErrorResponse(c, http.StatusNotFound, "Book not found")
